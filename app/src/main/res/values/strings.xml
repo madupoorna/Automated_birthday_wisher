@@ -1,8 +1,22 @@
 <resources>
     <string name="app_name">Automated Birthday Wisher</string>
-
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-
     <string name="title_activity_main_screen">MainScreenActivity</string>
+    <string name="set_contact_s_birthday">Set contact\'s birthday</string>
+    <string name="birtday">Birthday :</string>
+    <string name="set_birthday">Set Birthday</string>
+    <string name="select_the_time_for_the_message">Select the time for the message</string>
+    <string name="select_time">Select Time :</string>
+    <string name="set_time">Set Time</string>
+    <string name="add_message_content">Add message content</string>
+    <string name="message">Message..</string>
+    <string name="save">Save</string>
+    <string name="contact_image">contact image</string>
+    <string name="contact_name">Contact name</string>
+    <string name="app_logo">app logo</string>
+    <string name="mobile_number">mobile number</string>
+    <string name="name">name</string>
+    <string name="number">number</string>
+    <string name="date">date</string>
+    <string name="time">time</string>
+    <string name="todo">TODO</string>
 </resources>

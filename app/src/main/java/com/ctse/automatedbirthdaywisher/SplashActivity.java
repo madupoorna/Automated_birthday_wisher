@@ -12,6 +12,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        this.setTitle("");
+
         //open Main screen after 2000 mili seconds
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

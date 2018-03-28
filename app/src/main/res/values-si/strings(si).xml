@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Automated Birthday Wisher sinhala</string>
+    <string name="title_activity_main_screen">MainScreenActivity sinhala</string>
+    <string name="set_contact_s_birthday">Set contact\'s birthday sinhala</string>
+    <string name="birtday">Birthday : sinhala</string>
+    <string name="set_birthday">Set Birthday</string>
+    <string name="select_the_time_for_the_message">Select the time for the message</string>
+    <string name="select_time">Select Time :</string>
+    <string name="set_time">Set Time</string>
+    <string name="add_message_content">Add message content</string>
+    <string name="message">Message..</string>
+    <string name="save">surakinna</string>
+    <string name="contact_image">contact image</string>
+    <string name="contact_name">Contact name </string>
+    <string name="app_logo">app logo</string>
+</resources>
