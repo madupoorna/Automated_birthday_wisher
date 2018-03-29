@@ -28,7 +28,7 @@ public class ContactLsitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_lsit);
 
-        this.setTitle("Contact list");
+        this.setTitle(getString(R.string.contact_list));
 
         process = new Process();
 
@@ -61,7 +61,7 @@ public class ContactLsitActivity extends AppCompatActivity {
             id = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
             name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             phoneNumber = process.normalizeMobileNumber(phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-            bitmap = process.retrieveContactPhoto(this, id);
+            bitmap = process.getRoundedShape(process.retrieveContactPhoto(this, id));
 
             if (phoneNumber.length() == 10) {
                 contactList.add(new Contact(bitmap, name, phoneNumber));

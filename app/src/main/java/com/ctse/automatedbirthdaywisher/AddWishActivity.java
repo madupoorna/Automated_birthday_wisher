@@ -13,6 +13,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class AddWishActivity extends AppCompatActivity {
 
@@ -46,8 +47,7 @@ public class AddWishActivity extends AppCompatActivity {
         mod = getIntent().getStringExtra("modify");
 
         if (!mod.equals("mod")) {
-
-            this.setTitle("Add Wish");
+            this.setTitle(getString(R.string.add_wish));
 
             name = getIntent().getStringExtra("name");
             mobileNumber = getIntent().getStringExtra("phoneNumber");
@@ -55,9 +55,9 @@ public class AddWishActivity extends AppCompatActivity {
 
             nameTv.setText(name);
             numberTv.setText(mobileNumber);
-            imgView.setImageBitmap(process.byteToBitMap(img));
+            imgView.setImageBitmap(process.getRoundedShape(process.byteToBitMap(img)));
         } else {
-            this.setTitle("Modify Wish");
+            this.setTitle(getString(R.string.modify_wish));
 
             id = getIntent().getIntExtra("id", 0);
             data = dbHelper.getDetailsById(id);
@@ -67,7 +67,7 @@ public class AddWishActivity extends AppCompatActivity {
             setBirthDay.setText(data.getDate());
             setTime.setText(data.getTime());
             msgEt.setText(data.getMsg());
-            imgView.setImageBitmap(process.byteToBitMap(data.getImg()));
+            imgView.setImageBitmap(process.getRoundedShape(process.byteToBitMap(data.getImg())));
         }
 
         setTime.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +94,9 @@ public class AddWishActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new DatePickerFragment();
+                Bundle args = new Bundle();
+                args.putInt("textField", R.id.textView4);
+                newFragment.setArguments(args);
                 newFragment.show(getFragmentManager(), "Date Picker");
             }
         });
@@ -101,12 +104,24 @@ public class AddWishActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mod.equals("add")) {
-                    dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img);
-                    Toast.makeText(getApplicationContext(), "Data added", Toast.LENGTH_LONG).show();
+
+                if (msgEt.getText() != null) {
+                    if (Pattern.matches("[0-9:]*", setTime.getText().toString())
+                            && Pattern.matches("[0-9\\/]*", setBirthDay.getText().toString())
+                            && !msgEt.getText().toString().isEmpty()) {
+                        if (mod.equals("add")) {
+                            dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img);
+                            Toast.makeText(getApplicationContext(), R.string.data_added, Toast.LENGTH_LONG).show();
+                            AddWishActivity.super.onBackPressed();
+                        } else {
+                            dbHelper.update(id, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString());
+                            Toast.makeText(getApplicationContext(), R.string.data_modified, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img);
-                    Toast.makeText(getApplicationContext(), "Data modified", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
                 }
             }
         });

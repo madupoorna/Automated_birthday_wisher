@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/langSwitch"
+        android:title=""
+        app:actionLayout="@layout/lang_switch_layout"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/empty"
+        android:icon="@drawable/more_vert_ic"
+        android:orderInCategory="101"
+        android:title="asd"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_language"
+                android:icon="@drawable/ic_language"
+                android:title="@string/language"
+                app:actionLayout="@layout/lang_switch_layout"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/action_about"
+                android:icon="@drawable/ic_info_outline_black_48dp"
+                android:title="@string/about_us"
+                app:actionLayout="@layout/lang_switch_layout"
+                app:showAsAction="always" />
+        </menu>
+
+    </item>
+</menu>

@@ -17,6 +17,36 @@
     <string name="name">name</string>
     <string name="number">number</string>
     <string name="date">date</string>
-    <string name="time">time</string>
+    <string name="browse">Browse</string>
+    <string name="phone_number">Phone number</string>
     <string name="todo">TODO</string>
+    <string name="on">on</string>
+    <string name="off">off</string>
+    <string name="about_us">About us</string>
+    <string name="language">Language</string>
+    <string name="english_def">English (United States) (default)</string>
+    <string name="sinhala">සිOහල</string>
+    <string name="choose_lang">Choose language</string>
+    <string name="add_from_contacts">Add from Contacts</string>
+    <string name="add_manually">Add manually</string>
+    <string name="select_method">Select method</string>
+    <string name="wishes_list">Wish List</string>
+    <string name="contact_list">Contact list</string>
+    <string name="restart">Are you sure,You want to change language..? Changing language will restart the application</string>
+    <string name="click_back_twice">Please click BACK again to exit</string>
+    <string name="yes">yes</string>
+    <string name="no">No</string>
+    <string name="add_wish">Add wish</string>
+    <string name="modify_wish">Modify Wish</string>
+    <string name="ok">Ok</string>
+    <string name="time">Time :</string>
+    <string name="date_">Date :</string>
+    <string name="about_detials"><![CDATA[This is a Simple android project done for CTSE subject.\nDeveloped by\nK.M.M Karunadhipathi\nN.M.K.R.Somadasa]]></string>
+    <string name="data_removed">Data removed</string>
+    <string name="data_not_removed">Data not removed</string>
+    <string name="do_you_wnat_to_delete">Do you want to delete this wish..?</string>
+    <string name="data_added">Data added successfully</string>
+    <string name="data_modified">Data modified</string>
+    <string name="data_not_added">Data not added.Please fill all the fields</string>
+
 </resources>

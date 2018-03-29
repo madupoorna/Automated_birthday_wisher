@@ -7,12 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
+    SharedPreferenceController preference;
+    Process process;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
         this.setTitle("");
+        process = new Process();
+
+        preference = new SharedPreferenceController(this);
+        if (!preference.getPreference("language").equals("si")) {
+            preference.setPreference("language", "en");
+        }
+        process.changeLang(this, preference.getPreference("language"));
 
         //open Main screen after 2000 mili seconds
         final Handler handler = new Handler();

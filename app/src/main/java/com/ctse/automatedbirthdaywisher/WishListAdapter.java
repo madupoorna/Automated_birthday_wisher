@@ -59,7 +59,7 @@ public class WishListAdapter extends ArrayAdapter<DbData> {
         timeTv.setText(time);
         dateTv.setText(date);
 
-        image.setImageBitmap(process.byteToBitMap(img));
+        image.setImageBitmap(process.getRoundedShape(process.byteToBitMap(img)));
 
         moreDetails.setOnClickListener(new View.OnClickListener() {
             @Override

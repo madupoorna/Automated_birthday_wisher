@@ -15,21 +15,29 @@ import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+    TextView textView;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        long today = c.getTimeInMillis();
+
+        DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        dialog.getDatePicker().setMaxDate(today);
+
+        return dialog;
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
 
-        TextView tv = getActivity().findViewById(R.id.textView4);
-        tv.setText(year + "/" + month + "/" + day);
+        int value = getArguments().getInt("textField");
+        textView = getActivity().findViewById(value);
+        textView.setText(year + "/" + ++month + "/" + day);
 
     }
 }

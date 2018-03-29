@@ -100,11 +100,22 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return data;
     }
 
+    public void update(int id, String time, String date, String msg) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(TIME_COL, time);
+        values.put(DATE_COL, date);
+        values.put(MSG_COL, msg);
+
+        db.update(BDAY_TABLE, values, ID_COL + " = " + id, null);
+        db.close();
+    }
+
     public DbData getDetailsById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.rawQuery("SELECT * FROM " + BDAY_TABLE + " WHERE " + ID_COL + " = " + id + ";", null);
         cur.moveToNext();
-        DbData data = null;
 
         int numberIdx = cur.getColumnIndex(NUMBER_COL);
         int timeIdx = cur.getColumnIndex(TIME_COL);
@@ -114,13 +125,13 @@ public class MyDBHelper extends SQLiteOpenHelper {
         int imgIdx = cur.getColumnIndex(IMAGE_COL);
 
         String number = cur.getString(numberIdx);
-        String date = cur.getString(timeIdx);
-        String time = cur.getString(dateIdx);
+        String date = cur.getString(dateIdx);
+        String time = cur.getString(timeIdx);
         String msg = cur.getString(msgIdx);
         String name = cur.getString(nameIdx);
         byte[] photo = cur.getBlob(imgIdx);
 
-        data = new DbData(id, photo, number, date, time, msg, name);
+        DbData data = new DbData(id, photo, number, date, time, msg, name);
 
         db.close();
         return data;
