@@ -48,5 +48,8 @@
     <string name="data_added">Data added successfully</string>
     <string name="data_modified">Data modified</string>
     <string name="data_not_added">Data not added.Please fill all the fields</string>
+    <string name="please_enter_msg">Please enter message</string>
+    <string name="invalid_data_formats">Data not added, Invalid data formats</string>
+    <string name="loading">Loading..</string>
 
 </resources>

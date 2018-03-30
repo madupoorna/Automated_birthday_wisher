@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
 
 public class AddWishManuallyActivity extends AppCompatActivity {
 
+    private static final String TAG = "AddWishManuallyActivity";
     private static int RESULT_LOAD_IMAGE = 1;
 
     ImageView imageView;
@@ -52,6 +54,7 @@ public class AddWishManuallyActivity extends AppCompatActivity {
         process = new Process();
         dbHelper = new MyDBHelper(this);
 
+        //open gallery
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +63,7 @@ public class AddWishManuallyActivity extends AppCompatActivity {
             }
         });
 
+        //set time
         setTimeTv.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -80,6 +84,7 @@ public class AddWishManuallyActivity extends AppCompatActivity {
             }
         });
 
+        //set date
         setDateTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +96,7 @@ public class AddWishManuallyActivity extends AppCompatActivity {
             }
         });
 
+        //save
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,15 +107,18 @@ public class AddWishManuallyActivity extends AppCompatActivity {
                 msg = msgEt.getText().toString();
                 img = process.drawableTobyte(imageView.getDrawable());
 
-                if (name != null && number != null && msg != null) {
-                    if (!name.isEmpty() && process.isValidMobile(number) && Pattern.matches("[0-9:]*", time) && Pattern.matches("[0-9\\/]*", date) && !msg.isEmpty()) {
+                if (name != null && number != null && msg != null && !msg.isEmpty() && !name.isEmpty() && !number.isEmpty()) {
+                    if (process.isValidMobile(number) && Pattern.matches("[0-9:]*", time) && Pattern.matches("[0-9\\/]*", date)) {
                         dbHelper.insertWish(number, time, date, msg, name, img);
                         Toast.makeText(getApplicationContext(), R.string.data_added, Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "data added");
                         AddWishManuallyActivity.super.onBackPressed();
                     } else {
-                        Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "data not added,invalid data formats");
+                        Toast.makeText(getApplicationContext(), R.string.invalid_data_formats, Toast.LENGTH_LONG).show();
                     }
                 } else {
+                    Log.d(TAG, "data not added,empty fields");
                     Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
                 }
             }
@@ -120,12 +129,12 @@ public class AddWishManuallyActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //choose image from gallery
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -133,7 +142,6 @@ public class AddWishManuallyActivity extends AppCompatActivity {
             cursor.close();
 
             imageView.setImageBitmap(process.getRoundedShape(BitmapFactory.decodeFile(picturePath)));
-
         }
     }
 }

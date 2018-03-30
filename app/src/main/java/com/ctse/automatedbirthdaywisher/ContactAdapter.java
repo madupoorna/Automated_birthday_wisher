@@ -47,7 +47,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         String name = contactProperty.getName();
         String number = contactProperty.getNumber();
         Bitmap img = contactProperty.getImage();
-
         nameTv.setText(name);
         numberTv.setText(number);
         image.setImageBitmap(img);

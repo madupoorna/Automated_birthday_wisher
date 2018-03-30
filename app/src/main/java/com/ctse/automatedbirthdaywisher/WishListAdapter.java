@@ -36,6 +36,7 @@ public class WishListAdapter extends ArrayAdapter<DbData> {
         //get the property we are displaying
         DbData wishProperty = wishList.get(position);
         process = new Process();
+
         //get the inflater and inflate the XML layout for each item
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.row_item_2, null);
@@ -61,6 +62,7 @@ public class WishListAdapter extends ArrayAdapter<DbData> {
 
         image.setImageBitmap(process.getRoundedShape(process.byteToBitMap(img)));
 
+        //show more details
         moreDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

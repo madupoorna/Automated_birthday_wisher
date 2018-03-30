@@ -41,6 +41,7 @@ public class Process {
         return number;
     }
 
+    //change languagee
     public void changeLang(Context context, String lang) {
         Resources res = context.getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
@@ -49,13 +50,14 @@ public class Process {
         res.updateConfiguration(conf, dm);
     }
 
-
+    //byte to bitmap convert
     public Bitmap byteToBitMap(byte[] byteArray) {
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(byteArray);
         Bitmap bitmap = BitmapFactory.decodeStream(arrayInputStream);
         return bitmap;
     }
 
+    //drawable to byte convert
     public byte[] drawableTobyte(Drawable drawable) {
 
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -66,6 +68,7 @@ public class Process {
         return bitmapdata;
     }
 
+    //get photo using contact id
     public Bitmap retrieveContactPhoto(Context context, String contactID) {
 
         Bitmap photo = null;
@@ -87,9 +90,10 @@ public class Process {
         return photo;
     }
 
+    //make bitmaprounded
     public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
-        int targetWidth = 50;
-        int targetHeight = 50;
+        int targetWidth = 200;
+        int targetHeight = 200;
         Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
                 targetHeight, Bitmap.Config.ARGB_8888);
 
@@ -111,6 +115,7 @@ public class Process {
         return targetBitmap;
     }
 
+    //about us popup
     public void showAboutPopUp(Context context) {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.about_popup);
@@ -131,6 +136,7 @@ public class Process {
         dialog.show();
     }
 
+    //check is valid mobile number
     public boolean isValidMobile(String phone) {
 
         boolean check = false;

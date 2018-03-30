@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import java.util.Calendar;
 import java.util.regex.Pattern;
 
 public class AddWishActivity extends AppCompatActivity {
+
+    private static final String TAG = "AddWishActivity";
 
     String name, mobileNumber, mod;
     TextView nameTv, numberTv, setBirthDay, setTime;
@@ -47,6 +50,8 @@ public class AddWishActivity extends AppCompatActivity {
         mod = getIntent().getStringExtra("modify");
 
         if (!mod.equals("mod")) {
+            //add wish
+            Log.d(TAG, "add wish activity");
             this.setTitle(getString(R.string.add_wish));
 
             name = getIntent().getStringExtra("name");
@@ -57,6 +62,8 @@ public class AddWishActivity extends AppCompatActivity {
             numberTv.setText(mobileNumber);
             imgView.setImageBitmap(process.getRoundedShape(process.byteToBitMap(img)));
         } else {
+            //modify wish
+            Log.d(TAG, "modify wish activity");
             this.setTitle(getString(R.string.modify_wish));
 
             id = getIntent().getIntExtra("id", 0);
@@ -70,6 +77,7 @@ public class AddWishActivity extends AppCompatActivity {
             imgView.setImageBitmap(process.getRoundedShape(process.byteToBitMap(data.getImg())));
         }
 
+        //set time
         setTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -90,6 +98,7 @@ public class AddWishActivity extends AppCompatActivity {
             }
         });
 
+        //set date
         setBirthDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +110,7 @@ public class AddWishActivity extends AppCompatActivity {
             }
         });
 
+        //save
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,17 +121,21 @@ public class AddWishActivity extends AppCompatActivity {
                             && !msgEt.getText().toString().isEmpty()) {
                         if (mod.equals("add")) {
                             dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img);
+                            Log.d(TAG, "data inserted");
                             Toast.makeText(getApplicationContext(), R.string.data_added, Toast.LENGTH_LONG).show();
                             AddWishActivity.super.onBackPressed();
                         } else {
                             dbHelper.update(id, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString());
+                            Log.d(TAG, "data updated");
                             Toast.makeText(getApplicationContext(), R.string.data_modified, Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "data insertion failed. invalid fields");
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.please_enter_msg, Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "data insertion failed. message field empty");
                 }
             }
         });

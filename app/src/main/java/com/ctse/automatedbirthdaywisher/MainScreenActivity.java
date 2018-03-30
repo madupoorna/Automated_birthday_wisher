@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainScreenActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainScreenActivity";
 
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     ListView listView;
@@ -68,11 +71,15 @@ public class MainScreenActivity extends AppCompatActivity {
                         Intent intent;
                         switch (id) {
                             case 0:
+                                //create wish using contacts
                                 intent = new Intent(MainScreenActivity.this, ContactLsitActivity.class);
+                                Log.d(TAG, "select number from contact list");
                                 startActivity(intent);
                                 break;
                             case 1:
+                                //create wish manually
                                 intent = new Intent(MainScreenActivity.this, AddWishManuallyActivity.class);
+                                Log.d(TAG, "add number manually");
                                 startActivity(intent);
                                 break;
                         }
@@ -82,6 +89,7 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
 
+        //long click listener for deletion
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View view,
@@ -95,8 +103,10 @@ public class MainScreenActivity extends AppCompatActivity {
                     public void onClick(DialogInterface arg0, int arg1) {
                         state = dbHelper.deleteWish(idx);
                         if (state) {
+                            Log.d(TAG, "Data removed");
                             Toast.makeText(getApplicationContext(), R.string.data_removed, Toast.LENGTH_LONG).show();
                         } else {
+                            Log.d(TAG, "Data not removed");
                             Toast.makeText(getApplicationContext(), R.string.data_not_removed, Toast.LENGTH_LONG).show();
                         }
                         refreshList();
@@ -119,14 +129,17 @@ public class MainScreenActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        //start and off service
         getMenuInflater().inflate(R.menu.menu_main, menu);
         Switch toggle = menu.findItem(R.id.langSwitch).getActionView().findViewById(R.id.switchLang);
 
         if (preference.getPreference("service").equals("off")) {
             toggle.setChecked(false);
+            Log.d(TAG, "Service is stopped");
         } else {
             preference.setPreference("service", "on");
             toggle.setChecked(true);
+            Log.d(TAG, "Service started");
         }
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -135,9 +148,11 @@ public class MainScreenActivity extends AppCompatActivity {
                 if (!isChecked) {
                     preference.setPreference("service", "off");
                     Toast.makeText(getApplicationContext(), "off", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Service is stopped");
                 } else {
                     preference.setPreference("service", "on");
                     Toast.makeText(getApplicationContext(), "on", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Service started");
                 }
             }
         });
@@ -151,6 +166,7 @@ public class MainScreenActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_language) {
+            //change language
             CharSequence lang[] = new CharSequence[]{getString(R.string.english_def), getString(R.string.sinhala)};
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.choose_lang);
@@ -177,6 +193,7 @@ public class MainScreenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //alert dialog to get restart permission
     public void alertDialog(final String lang) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(R.string.restart);
@@ -184,6 +201,7 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 preference.setPreference("language", lang);
+                Log.d(TAG, "Language changed to " + lang + " Restarting application");
                 restartApp();
             }
         });
@@ -209,13 +227,15 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     public void refreshList() {
-        adapter.clear();
+
         wishList = new ArrayList<>();
         wishList = dbHelper.getAllWishes();
+        adapter.clear();
         adapter.addAll(wishList);
         adapter.notifyDataSetChanged();
     }
 
+    //get device permissions
     private boolean checkAndRequestPermissions() {
 
         int READ_CONTACTS = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS);
@@ -240,6 +260,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //double back to quit application
         if (doubleBackToExitPressedOnce) {
             closeApplication();
         }
@@ -256,7 +277,9 @@ public class MainScreenActivity extends AppCompatActivity {
         }, 2000);
     }
 
+    //close application
     public void closeApplication() {
+        Log.d(TAG, "Application closing");
         finish();
         moveTaskToBack(true);
     }

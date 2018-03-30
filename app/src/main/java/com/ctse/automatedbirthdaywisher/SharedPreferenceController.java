@@ -19,11 +19,13 @@ public class SharedPreferenceController {
         this.context = context;
     }
 
+    //set shared prefernce
     public boolean setPreference(String key, String value) {
         prefs = context.getSharedPreferences("AUTO-WISH", MODE_PRIVATE);
         return prefs.edit().putString(key, value).commit();
     }
 
+    //get shared prefernce
     public String getPreference(String key) {
         prefs = context.getSharedPreferences("AUTO-WISH", MODE_PRIVATE);
         value = prefs.getString(key, "empty");

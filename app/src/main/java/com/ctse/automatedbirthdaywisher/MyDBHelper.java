@@ -55,6 +55,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //add new wish
     public void insertWish(String number, String time, String date, String msg, String name, byte[] image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -70,6 +71,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    //get all wishes
     public List<DbData> getAllWishes() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.rawQuery("SELECT * FROM " + BDAY_TABLE + ";", null);
@@ -100,6 +102,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return data;
     }
 
+    //update wish
     public void update(int id, String time, String date, String msg) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -112,6 +115,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    //get wish details by an id
     public DbData getDetailsById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.rawQuery("SELECT * FROM " + BDAY_TABLE + " WHERE " + ID_COL + " = " + id + ";", null);
@@ -137,6 +141,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return data;
     }
 
+    //delete wish
     public boolean deleteWish(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(BDAY_TABLE, ID_COL + "=" + id, null) > 0;
