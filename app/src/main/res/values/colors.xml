@@ -6,4 +6,8 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="TextAreaBorderColor">#CCCCCC</color>
+
+    <color name="success_color">#43A047</color>
+    <color name="failed_color">#F44336</color>
+
 </resources>

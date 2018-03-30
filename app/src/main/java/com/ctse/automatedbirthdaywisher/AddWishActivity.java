@@ -3,6 +3,7 @@ package com.ctse.automatedbirthdaywisher;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;
@@ -122,19 +122,19 @@ public class AddWishActivity extends AppCompatActivity {
                         if (mod.equals("add")) {
                             dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img);
                             Log.d(TAG, "data inserted");
-                            Toast.makeText(getApplicationContext(), R.string.data_added, Toast.LENGTH_LONG).show();
+                            Snackbar.make(v, R.string.data_added, Snackbar.LENGTH_LONG).show();
                             AddWishActivity.super.onBackPressed();
                         } else {
                             dbHelper.update(id, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString());
                             Log.d(TAG, "data updated");
-                            Toast.makeText(getApplicationContext(), R.string.data_modified, Toast.LENGTH_LONG).show();
+                            Snackbar.make(v, R.string.data_modified, Snackbar.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
+                        Snackbar.make(v, R.string.data_not_added, Snackbar.LENGTH_LONG).show();
                         Log.d(TAG, "data insertion failed. invalid fields");
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.please_enter_msg, Toast.LENGTH_LONG).show();
+                    Snackbar.make(v, R.string.please_enter_msg, Snackbar.LENGTH_LONG).show();
                     Log.d(TAG, "data insertion failed. message field empty");
                 }
             }

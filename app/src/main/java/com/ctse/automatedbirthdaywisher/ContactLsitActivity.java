@@ -47,7 +47,7 @@ public class ContactLsitActivity extends AppCompatActivity {
         contactList = new ArrayList<>();
         contactNumbers = new ArrayList<>();
 
-        //Async task to reteive contatcs
+        //Async task to retrieve contacts
         new retreiveContacts().execute();
     }
 
@@ -61,10 +61,11 @@ public class ContactLsitActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            //do after background process finished
             Log.d(TAG, "Contact list loading " + result);
             progressBar.setVisibility(View.GONE);
             progressTv.setVisibility(View.GONE);
-            refreshList();
+            loadContactList();
         }
 
         @Override
@@ -75,7 +76,7 @@ public class ContactLsitActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
         }
 
-        public void refreshList() {
+        private void loadContactList() {
 
             adapter = new ContactAdapter(context, 0, contactList);
             listView = (ListView) findViewById(R.id.contact_list);
@@ -98,7 +99,7 @@ public class ContactLsitActivity extends AppCompatActivity {
         }
 
         //get contacts
-        public void getContacts() {
+        private void getContacts() {
 
             Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
             String id, name, phoneNumber;
@@ -114,7 +115,6 @@ public class ContactLsitActivity extends AppCompatActivity {
                     contactList.add(new Contact(bitmap, name, phoneNumber));
                 }
             }
-
             phones.close();
         }
     }

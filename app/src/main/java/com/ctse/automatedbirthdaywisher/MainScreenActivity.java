@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -19,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +92,7 @@ public class MainScreenActivity extends AppCompatActivity {
         //long click listener for deletion
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View view,
+            public boolean onItemLongClick(AdapterView<?> arg0, final View view,
                                            int pos, long id) {
                 final int idx = wishList.get(pos).getId();
 
@@ -104,10 +104,10 @@ public class MainScreenActivity extends AppCompatActivity {
                         state = dbHelper.deleteWish(idx);
                         if (state) {
                             Log.d(TAG, "Data removed");
-                            Toast.makeText(getApplicationContext(), R.string.data_removed, Toast.LENGTH_LONG).show();
+                            Snackbar.make(view, R.string.data_removed, Snackbar.LENGTH_LONG).show();
                         } else {
                             Log.d(TAG, "Data not removed");
-                            Toast.makeText(getApplicationContext(), R.string.data_not_removed, Toast.LENGTH_LONG).show();
+                            Snackbar.make(view, R.string.data_not_removed, Snackbar.LENGTH_LONG).show();
                         }
                         refreshList();
                     }
@@ -147,11 +147,11 @@ public class MainScreenActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
                     preference.setPreference("service", "off");
-                    Toast.makeText(getApplicationContext(), "off", Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), R.string.off, Snackbar.LENGTH_LONG).show();
                     Log.d(TAG, "Service is stopped");
                 } else {
                     preference.setPreference("service", "on");
-                    Toast.makeText(getApplicationContext(), "on", Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), R.string.on, Snackbar.LENGTH_LONG).show();
                     Log.d(TAG, "Service started");
                 }
             }
@@ -266,7 +266,7 @@ public class MainScreenActivity extends AppCompatActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, R.string.click_back_twice, Toast.LENGTH_SHORT).show();
+        Snackbar.make(this.listView, R.string.click_back_twice, Snackbar.LENGTH_LONG).show();
 
         new Handler().postDelayed(new Runnable() {
 

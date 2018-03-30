@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;
@@ -110,16 +110,16 @@ public class AddWishManuallyActivity extends AppCompatActivity {
                 if (name != null && number != null && msg != null && !msg.isEmpty() && !name.isEmpty() && !number.isEmpty()) {
                     if (process.isValidMobile(number) && Pattern.matches("[0-9:]*", time) && Pattern.matches("[0-9\\/]*", date)) {
                         dbHelper.insertWish(number, time, date, msg, name, img);
-                        Toast.makeText(getApplicationContext(), R.string.data_added, Toast.LENGTH_LONG).show();
+                        Snackbar.make(v, R.string.data_added, Snackbar.LENGTH_LONG).setActionTextColor(getResources().getColor(R.color.success_color)).show();
                         Log.d(TAG, "data added");
                         AddWishManuallyActivity.super.onBackPressed();
                     } else {
+                        Snackbar.make(v, R.string.invalid_data_formats, Snackbar.LENGTH_LONG).setActionTextColor(getResources().getColor(R.color.failed_color)).show();
                         Log.d(TAG, "data not added,invalid data formats");
-                        Toast.makeText(getApplicationContext(), R.string.invalid_data_formats, Toast.LENGTH_LONG).show();
                     }
                 } else {
+                    Snackbar.make(v, R.string.data_not_added, Snackbar.LENGTH_LONG).setActionTextColor(getResources().getColor(R.color.failed_color)).show();
                     Log.d(TAG, "data not added,empty fields");
-                    Toast.makeText(getApplicationContext(), R.string.data_not_added, Toast.LENGTH_LONG).show();
                 }
             }
         });
