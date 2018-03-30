@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
@@ -120,7 +119,7 @@ public class Process {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.about_popup);
         dialog.setTitle(context.getString(R.string.about_us));
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         TextView text = dialog.findViewById(R.id.textView);
         text.setText(R.string.about_detials);
         ImageView image = dialog.findViewById(R.id.image);

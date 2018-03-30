@@ -10,23 +10,22 @@
 
     <item
         android:id="@+id/empty"
-        android:icon="@drawable/more_vert_ic"
+        android:icon="@drawable/ic_more_vert_white"
         android:orderInCategory="101"
         android:title="asd"
         app:showAsAction="always">
 
         <menu>
-
             <item
                 android:id="@+id/action_language"
-                android:icon="@drawable/ic_language"
+                android:icon="@drawable/ic_language_white"
                 android:title="@string/language"
                 app:actionLayout="@layout/lang_switch_layout"
                 app:showAsAction="always" />
 
             <item
                 android:id="@+id/action_about"
-                android:icon="@drawable/ic_info_outline_black_48dp"
+                android:icon="@drawable/ic_info_outline_white"
                 android:title="@string/about_us"
                 app:actionLayout="@layout/lang_switch_layout"
                 app:showAsAction="always" />

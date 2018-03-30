@@ -110,15 +110,15 @@ public class AddWishManuallyActivity extends AppCompatActivity {
                 if (name != null && number != null && msg != null && !msg.isEmpty() && !name.isEmpty() && !number.isEmpty()) {
                     if (process.isValidMobile(number) && Pattern.matches("[0-9:]*", time) && Pattern.matches("[0-9\\/]*", date)) {
                         dbHelper.insertWish(number, time, date, msg, name, img);
-                        Snackbar.make(v, R.string.data_added, Snackbar.LENGTH_LONG).setActionTextColor(getResources().getColor(R.color.success_color)).show();
+                        Snackbar.make(v, R.string.data_added, Snackbar.LENGTH_LONG).show();
                         Log.d(TAG, "data added");
                         AddWishManuallyActivity.super.onBackPressed();
                     } else {
-                        Snackbar.make(v, R.string.invalid_data_formats, Snackbar.LENGTH_LONG).setActionTextColor(getResources().getColor(R.color.failed_color)).show();
+                        Snackbar.make(v, R.string.invalid_data_formats, Snackbar.LENGTH_LONG).show();
                         Log.d(TAG, "data not added,invalid data formats");
                     }
                 } else {
-                    Snackbar.make(v, R.string.data_not_added, Snackbar.LENGTH_LONG).setActionTextColor(getResources().getColor(R.color.failed_color)).show();
+                    Snackbar.make(v, R.string.data_not_added, Snackbar.LENGTH_LONG).show();
                     Log.d(TAG, "data not added,empty fields");
                 }
             }

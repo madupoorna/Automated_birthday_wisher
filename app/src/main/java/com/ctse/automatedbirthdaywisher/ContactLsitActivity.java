@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ContactLsitActivity extends AppCompatActivity {
     ProgressBar progressBar;
     TextView progressTv;
     ArrayAdapter<Contact> adapter;
+    Toolbar toolbar;
     private List<Contact> contactList;
     private List<String> contactNumbers;
 
@@ -39,6 +41,7 @@ public class ContactLsitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_lsit);
 
         this.setTitle(getString(R.string.contact_list));
+
         context = this;
         process = new Process();
         progressBar = (ProgressBar) findViewById(R.id.progressBar);

@@ -36,6 +36,8 @@ public class AddWishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_wish);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         process = new Process();
 
         setBirthDay = (TextView) findViewById(R.id.textView4);
