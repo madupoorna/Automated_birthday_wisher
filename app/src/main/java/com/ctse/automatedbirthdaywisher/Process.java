@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
+import android.telephony.SmsManager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -149,6 +151,24 @@ public class Process {
             check = false;
         }
         return check;
+    }
+
+    public String getSystemDate() {
+        Calendar now = Calendar.getInstance();
+        int month = now.get(Calendar.MONTH) + 1; // Get hour in 24 hour format
+        int day = now.get(Calendar.DAY_OF_MONTH);
+
+        return month + "/" + day;
+    }
+
+    public boolean sentMessage(Context context, String date, String name, String number, String msg) {
+        if (date.substring(5).equals(getSystemDate())) {
+
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(number, null, msg, null, null);
+            return true;
+        }
+        return false;
     }
 }
 

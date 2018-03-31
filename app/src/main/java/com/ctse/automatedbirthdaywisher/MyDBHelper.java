@@ -38,7 +38,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
             + DATE_COL + " TEXT,"
             + MSG_COL + " TEXT,"
             + IMAGE_COL + " BLOB,"
-            + FLAG_COL + " TEXT" + ")";
+            + FLAG_COL + " INTEGER" + ")";
 
     public MyDBHelper(Context context) {
         super(context.getApplicationContext(), DB_NAME, null, DATABASE_VERSION);
@@ -56,7 +56,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
 
     //add new wish
-    public void insertWish(String number, String time, String date, String msg, String name, byte[] image) {
+    public void insertWish(String number, String time, String date, String msg, String name, byte[] image, int flag) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -66,7 +66,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         values.put(DATE_COL, date);
         values.put(MSG_COL, msg);
         values.put(IMAGE_COL, image);
-
+        values.put(FLAG_COL, flag);
         db.insert(BDAY_TABLE, null, values);
         db.close();
     }
@@ -84,6 +84,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         int msgIdx = cur.getColumnIndex(DATE_COL);
         int nameIdx = cur.getColumnIndex(NAME_COL);
         int imgIdx = cur.getColumnIndex(IMAGE_COL);
+        int flgIdx = cur.getColumnIndex(FLAG_COL);
 
         List<DbData> data = new ArrayList<>();
         while (!cur.isAfterLast()) {
@@ -93,9 +94,10 @@ public class MyDBHelper extends SQLiteOpenHelper {
             String time = cur.getString(dateIdx);
             String msg = cur.getString(msgIdx);
             String name = cur.getString(nameIdx);
+            int flag = cur.getInt(flgIdx);
             byte[] photo = cur.getBlob(imgIdx);
 
-            data.add(new DbData(id, photo, number, date, time, msg, name));
+            data.add(new DbData(id, photo, number, date, time, msg, name, flag));
             cur.moveToNext();
         }
         db.close();
@@ -127,15 +129,17 @@ public class MyDBHelper extends SQLiteOpenHelper {
         int msgIdx = cur.getColumnIndex(MSG_COL);
         int nameIdx = cur.getColumnIndex(NAME_COL);
         int imgIdx = cur.getColumnIndex(IMAGE_COL);
+        int flgIdx = cur.getColumnIndex(FLAG_COL);
 
         String number = cur.getString(numberIdx);
         String date = cur.getString(dateIdx);
         String time = cur.getString(timeIdx);
         String msg = cur.getString(msgIdx);
         String name = cur.getString(nameIdx);
+        int flag = cur.getInt(flgIdx);
         byte[] photo = cur.getBlob(imgIdx);
 
-        DbData data = new DbData(id, photo, number, date, time, msg, name);
+        DbData data = new DbData(id, photo, number, date, time, msg, name, flag);
 
         db.close();
         return data;
@@ -145,6 +149,16 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public boolean deleteWish(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(BDAY_TABLE, ID_COL + "=" + id, null) > 0;
+    }
+
+    public void updateFlag(int id, int flag) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(FLAG_COL, flag);
+
+        db.update(BDAY_TABLE, values, ID_COL + " = " + id, null);
+        db.close();
     }
 
 }

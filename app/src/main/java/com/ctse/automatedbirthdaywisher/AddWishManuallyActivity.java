@@ -109,8 +109,16 @@ public class AddWishManuallyActivity extends AppCompatActivity {
 
                 if (name != null && number != null && msg != null && !msg.isEmpty() && !name.isEmpty() && !number.isEmpty()) {
                     if (process.isValidMobile(number) && Pattern.matches("[0-9:]*", time) && Pattern.matches("[0-9\\/]*", date)) {
-                        dbHelper.insertWish(number, time, date, msg, name, img);
+                        if (date.substring(5).equals(process.getSystemDate())) {
+                            dbHelper.insertWish(number, time, date, msg, name, img, 1);
+                        } else {
+                            dbHelper.insertWish(number, time, date, msg, name, img, 0);
+                        }
                         Snackbar.make(v, R.string.data_added, Snackbar.LENGTH_LONG).show();
+                        boolean sent = process.sentMessage(getApplicationContext(), date, name, number, msg);
+                        if (sent) {
+                            Snackbar.make(v, "Your wish sent to " + name, Snackbar.LENGTH_LONG).show();
+                        }
                         Log.d(TAG, "data added");
                         AddWishManuallyActivity.super.onBackPressed();
                     } else {

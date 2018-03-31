@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ce7db8d7"
     tools:context="com.ctse.automatedbirthdaywisher.SplashActivity">
 
     <TextView
@@ -12,8 +13,9 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/app_name"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="#ffff"
         android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintLeft_toLeftOf="parent"

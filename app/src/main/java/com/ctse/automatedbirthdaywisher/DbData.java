@@ -13,7 +13,7 @@ public class DbData {
     public DbData() {
     }
 
-    public DbData(int id, byte[] img, String phoneNumber, String date, String time, String msg, String name) {
+    public DbData(int id, byte[] img, String phoneNumber, String date, String time, String msg, String name, int flag) {
         this.id = id;
         this.img = img;
         this.phoneNumber = phoneNumber;
@@ -21,6 +21,7 @@ public class DbData {
         this.time = time;
         this.name = name;
         this.msg = msg;
+        this.flag = flag;
     }
 
     public int getId() {
@@ -86,4 +87,5 @@ public class DbData {
     public void setImg(byte[] img) {
         this.img = img;
     }
+
 }

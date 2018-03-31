@@ -1,5 +1,8 @@
 package com.ctse.automatedbirthdaywisher;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,14 +24,19 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 
+import com.ctse.automatedbirthdaywisher.background_task.MsgJobSheduler;
+import com.ctse.automatedbirthdaywisher.background_task.MsgSentLogic;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainScreenActivity extends AppCompatActivity {
 
     private static final String TAG = "MainScreenActivity";
 
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    private static final int JOB_ID = 101;
     ListView listView;
     List<DbData> wishList;
     MyDBHelper dbHelper;
@@ -37,6 +45,9 @@ public class MainScreenActivity extends AppCompatActivity {
     SharedPreferenceController preference;
     boolean doubleBackToExitPressedOnce = false;
     Process process;
+    MsgSentLogic logic;
+    private JobScheduler jobScheduler;
+    private JobInfo jobInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,7 @@ public class MainScreenActivity extends AppCompatActivity {
         this.setTitle(getString(R.string.wishes_list));
         listView = (ListView) findViewById(R.id.wishList);
         preference = new SharedPreferenceController(this);
+        logic = new MsgSentLogic(this);
 
         if (checkAndRequestPermissions()) {
 
@@ -104,10 +116,10 @@ public class MainScreenActivity extends AppCompatActivity {
                         state = dbHelper.deleteWish(idx);
                         if (state) {
                             Log.d(TAG, "Data removed");
-                            Snackbar.make(view, R.string.data_removed, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(listView, R.string.data_removed, Snackbar.LENGTH_LONG).show();
                         } else {
                             Log.d(TAG, "Data not removed");
-                            Snackbar.make(view, R.string.data_not_removed, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(listView, R.string.data_not_removed, Snackbar.LENGTH_LONG).show();
                         }
                         refreshList();
                     }
@@ -124,6 +136,16 @@ public class MainScreenActivity extends AppCompatActivity {
                 return state;
             }
         });
+
+        ComponentName componentName = new ComponentName(this, MsgJobSheduler.class);
+        JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, componentName);
+
+        builder.setPeriodic(TimeUnit.HOURS.toMillis(24));
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+        builder.setPersisted(true);
+
+        jobInfo = builder.build();
+        jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
     }
 
     @Override
@@ -135,11 +157,15 @@ public class MainScreenActivity extends AppCompatActivity {
 
         if (preference.getPreference("service").equals("off")) {
             toggle.setChecked(false);
-            Log.d(TAG, "Service is stopped");
+            jobScheduler.cancel(JOB_ID);
+            Log.d(TAG, "Service has been stopped");
         } else {
             preference.setPreference("service", "on");
             toggle.setChecked(true);
-            Log.d(TAG, "Service started");
+            jobScheduler.schedule(jobInfo);
+            Log.d(TAG, "Service has been started");
+            if (!logic.sendMsg().equals(""))
+                Snackbar.make(listView, getString(R.string.your_wish_sent_to) + logic.sendMsg(), Snackbar.LENGTH_LONG).show();
         }
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -147,12 +173,16 @@ public class MainScreenActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
                     preference.setPreference("service", "off");
-                    Snackbar.make(findViewById(android.R.id.content), R.string.off, Snackbar.LENGTH_LONG).show();
-                    Log.d(TAG, "Service is stopped");
+                    jobScheduler.cancel(JOB_ID);
+                    Snackbar.make(listView, R.string.service_stop, Snackbar.LENGTH_LONG).show();
+                    Log.d(TAG, "Service has been stopped");
                 } else {
                     preference.setPreference("service", "on");
-                    Snackbar.make(findViewById(android.R.id.content), R.string.on, Snackbar.LENGTH_LONG).show();
+                    jobScheduler.schedule(jobInfo);
+                    Snackbar.make(listView, R.string.service_start, Snackbar.LENGTH_LONG).show();
                     Log.d(TAG, "Service started");
+                    if (!logic.sendMsg().equals(""))
+                        Snackbar.make(listView, getString(R.string.your_wish_sent_to) + logic.sendMsg(), Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -240,6 +270,10 @@ public class MainScreenActivity extends AppCompatActivity {
 
         int READ_CONTACTS = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS);
         int READ_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        int RECEIVE_BOOT_COMPLETED = ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECEIVE_BOOT_COMPLETED);
+        int ACCESS_NETWORK_STATE = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_NETWORK_STATE);
+        int READ_PHONE_STATE = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE);
+        int SEND_SMS = ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS);
 
         List<String> listPermissionsNeeded = new ArrayList<>();
 
@@ -248,6 +282,18 @@ public class MainScreenActivity extends AppCompatActivity {
         }
         if (READ_EXTERNAL_STORAGE != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (RECEIVE_BOOT_COMPLETED != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.RECEIVE_BOOT_COMPLETED);
+        }
+        if (ACCESS_NETWORK_STATE != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_NETWORK_STATE);
+        }
+        if (READ_PHONE_STATE != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.READ_PHONE_STATE);
+        }
+        if (SEND_SMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.SEND_SMS);
         }
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray
@@ -266,7 +312,7 @@ public class MainScreenActivity extends AppCompatActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Snackbar.make(this.listView, R.string.click_back_twice, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(listView, R.string.click_back_twice, Snackbar.LENGTH_LONG).show();
 
         new Handler().postDelayed(new Runnable() {
 

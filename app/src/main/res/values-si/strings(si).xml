@@ -49,5 +49,9 @@
     <string name="data_added">දත්ත ඇතුල් කිරීම සාර්තකයි</string>
     <string name="data_modified">දත්ත වෙනස් කිරීම සාර්තකයි</string>
     <string name="data_not_added">දත්ත ඇතුල් කිරීම අසාර්තකයි.සියලු දත්ත පුරවන්න</string>
+    <string name="invalid_data_formats">දත්ත ඇතුල් කිරීම අසාර්තකයි. Invalid data formats</string>
     <string name="please_enter_msg">පනිවුඩය ඇතුලත් කරන්න</string>
+    <string name="your_wish_sent_to">ඔබේ සුබ පැතුම යවා ඇත්තේ </string>
+    <string name="service_start">සේවාව සක්‍රිය කරන ලදි</string>
+    <string name="service_stop">සේවාව ක්‍රියාවිරහිත කරන ලදි</string>
 </resources>

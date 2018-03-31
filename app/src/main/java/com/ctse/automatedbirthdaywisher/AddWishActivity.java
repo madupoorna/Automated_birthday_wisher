@@ -122,14 +122,26 @@ public class AddWishActivity extends AppCompatActivity {
                             && Pattern.matches("[0-9\\/]*", setBirthDay.getText().toString())
                             && !msgEt.getText().toString().isEmpty()) {
                         if (mod.equals("add")) {
-                            dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img);
+                            if (setBirthDay.getText().toString().substring(5).equals(process.getSystemDate())) {
+                                dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img, 1);
+                            } else {
+                                dbHelper.insertWish(mobileNumber, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString(), name, img, 0);
+                            }
+
                             Log.d(TAG, "data inserted");
+                            boolean sent = process.sentMessage(getApplicationContext(), setBirthDay.getText().toString(), name, mobileNumber, msgEt.getText().toString());
+                            if (sent) {
+                                Snackbar.make(v, "Your wish sent to " + name, Snackbar.LENGTH_LONG).show();
+                            }
                             Snackbar.make(v, R.string.data_added, Snackbar.LENGTH_LONG).show();
                             AddWishActivity.super.onBackPressed();
                         } else {
                             dbHelper.update(id, setTime.getText().toString(), setBirthDay.getText().toString(), msgEt.getText().toString());
                             Log.d(TAG, "data updated");
                             Snackbar.make(v, R.string.data_modified, Snackbar.LENGTH_LONG).show();
+                            boolean check = process.sentMessage(getApplicationContext(), setBirthDay.getText().toString(), nameTv.getText().toString(), mobileNumber, msgEt.getText().toString());
+                            if (check)
+                                dbHelper.updateFlag(id, 1);
                         }
                     } else {
                         Snackbar.make(v, R.string.data_not_added, Snackbar.LENGTH_LONG).show();

@@ -10,5 +10,6 @@
     <color name="white_opaque">#FFFFFFFF</color>
     <color name="pitch_black">#FF000000</color>
     <color name="accent_material_dark">#4fbfbf</color>
+    <color name="main_screen_blue">#0bacf4</color>
 
 </resources>
